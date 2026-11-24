@@ -25,7 +25,7 @@
     "ghcr.io/devcontainers/features/git:1": {
       "version": "latest"
     },
-    "ghcr.io/coder/devcontainer-features/code-server:1": {
+    "ghcr.io/coder/devcontainer-features/code-server:2": {
       "version": "4.146.0",
       "appName": "Alixea",
       "disableWorkspaceTrust": "true",
