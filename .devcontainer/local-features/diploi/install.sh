@@ -79,11 +79,12 @@ fi
 EOT
 
 # Setup pnpm, the version the components' base image has (alixea-erp/component-bases). Node.js stopped shipping
-# corepack in version 25. The settings are ENV in the Dockerfile
-mkdir -p /home/$_CONTAINER_USER/.pnpm-store
-chown $_CONTAINER_USER:$_CONTAINER_USER /home/$_CONTAINER_USER/.pnpm-store
-bash -c '. /usr/local/share/nvm/nvm.sh && npm install -g corepack@0.36.0'
-sudo -u $_CONTAINER_USER -H zsh -lc "export PNPM_HOME=/home/$_CONTAINER_USER/.local/share/pnpm && export PATH=\"\$PNPM_HOME/bin:\$PNPM_HOME:\$PATH\" && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 . /usr/local/share/nvm/nvm.sh && corepack enable pnpm && corepack install -g pnpm@12.21.0 && SHELL=/usr/bin/zsh pnpm setup && pnpm config set store-dir /home/$_CONTAINER_USER/.pnpm-store --global"
+# corepack in version 25, and its npm package brings the pnpm and yarn commands: the yarn the node feature installed
+# from npm is in their way. The settings are ENV in the Dockerfile
+mkdir -p /home/$_CONTAINER_USER/.pnpm-store /usr/local/share/corepack
+chown $_CONTAINER_USER:$_CONTAINER_USER /home/$_CONTAINER_USER/.pnpm-store /usr/local/share/corepack
+bash -c '. /usr/local/share/nvm/nvm.sh && npm uninstall -g yarn && npm install -g corepack@0.36.0'
+sudo -u $_CONTAINER_USER -H zsh -lc "export COREPACK_HOME=/usr/local/share/corepack && export PNPM_HOME=/home/$_CONTAINER_USER/.local/share/pnpm && export PATH=\"\$PNPM_HOME/bin:\$PNPM_HOME:\$PATH\" && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 . /usr/local/share/nvm/nvm.sh && corepack install -g pnpm@12.21.0 && SHELL=/usr/bin/zsh pnpm setup && pnpm config set store-dir /home/$_CONTAINER_USER/.pnpm-store --global"
 
 # Install opencode globally and symlink it to a stable path for supervisord and non-login shells
 bash -c '. /usr/local/share/nvm/nvm.sh && npm install -g opencode-ai@~1.19.6'

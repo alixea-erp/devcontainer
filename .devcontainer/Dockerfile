@@ -15,6 +15,9 @@ ENV LANG="C.UTF-8"
 # The same pnpm settings as the components' base image (alixea-erp/component-bases), for every process: a shell, an
 # AI agent and the editor write one node_modules layout, the one the component installs
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+# In the image, not the home folder: a deployment's home is only filled at its first start, and would keep the pnpm
+# of that day
+ENV COREPACK_HOME=/usr/local/share/corepack
 ENV PNPM_CONFIG_NODE_LINKER=hoisted
 ENV PNPM_CONFIG_MINIMUM_RELEASE_AGE=0
 ENV PNPM_CONFIG_STRICT_DEP_BUILDS=false
