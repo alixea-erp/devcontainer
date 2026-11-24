@@ -1,0 +1,39 @@
+name: Build Dev Container Image
+
+# Core runs the image by its digest (DEVCONTAINER_IMAGE in core/src/reconciler/tasks/taskDevpod.ts of the platform),
+# so a build reaches deployments only when that digest is changed
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  IMAGE: public.ecr.aws/p8t2q7f4/alixea/devcontainer
+
+jobs:
+  devcontainer:
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::300197899440:role/AlixeaPrebuildPushForGithubActions
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR Public
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry-type: public
+
+      - name: Pre-build Dev Container image
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: ${{ env.IMAGE }}
+          cacheFrom: ${{ env.IMAGE }}
+          push: always
