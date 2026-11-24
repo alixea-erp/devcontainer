@@ -18,7 +18,7 @@ cat > /home/$_CONTAINER_USER/.local/share/code-server/User/settings.json <<EOT
 {
   "workbench.colorTheme": "Default Dark Modern",
   "workbench.startupEditor": "none",
-  "chat.commandCenter.enabled": false,
+  "chat.agentsControl.enabled": false,
   "keyboard.dispatch": "keyCode"
 }
 EOT

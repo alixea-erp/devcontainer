@@ -4,19 +4,26 @@ set -eax
 
 VERSION="${VERSION:-latest}"
 
-# The official installer accepts an optional release tag (e.g. "bun-v1.4.2"); omit it for latest
+case "$(uname -m)" in
+    aarch64 | arm64) TARGET=aarch64 ;;
+    *) TARGET=x64 ;;
+esac
+
 if [ "$VERSION" = "latest" ]; then
-    BUN_RELEASE=""
+    URL="https://github.com/oven-sh/bun/releases/latest/download/bun-linux-${TARGET}.zip"
 else
-    BUN_RELEASE="bun-v${VERSION#v}"
+    URL="https://github.com/oven-sh/bun/releases/download/bun-v${VERSION#v}/bun-linux-${TARGET}.zip"
 fi
 
-sudo -iu $_REMOTE_USER <<EOT
-    curl -fsSL https://bun.sh/install | bash -s ${BUN_RELEASE}
+# Into the image, not the user's home: a deployment's home is only filled at its first start, and a Bun there would
+# stay at that day's version and come first in PATH
+curl -fsSL -o /tmp/bun.zip "$URL"
+unzip -q /tmp/bun.zip -d /tmp
+install -m 755 "/tmp/bun-linux-${TARGET}/bun" /usr/local/bin/bun
+ln -sf bun /usr/local/bin/bunx
+rm -rf /tmp/bun.zip "/tmp/bun-linux-${TARGET}"
+
+# What `bun add -g` installs for the user, after the image's own tools
+cat <<'EOT' >> /home/$_REMOTE_USER/.zshrc
+export PATH="$PATH:$HOME/.bun/bin"
 EOT
-
-# Resolve the user's home directory (do not rely on _REMOTE_USER_HOME, which may be unset here)
-REMOTE_USER_HOME=$(getent passwd "$_REMOTE_USER" | cut -d: -f6)
-
-# Copy (not symlink) the binary so it works even when the runtime home volume lacks ~/.bun
-install -m 755 "$REMOTE_USER_HOME/.bun/bin/bun" /usr/local/bin/bun
