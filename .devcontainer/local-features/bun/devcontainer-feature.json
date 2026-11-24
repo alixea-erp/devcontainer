@@ -5,9 +5,9 @@
 	"options": {
 		"version": {
 			"type": "string",
-			"proposals": ["latest", "1.4.2"],
+			"proposals": ["latest", "1.4.5"],
 			"default": "latest",
-			"description": "Bun version to install (e.g. 1.4.2), or 'latest'."
+			"description": "Bun version to install (e.g. 1.4.5), or 'latest'."
 		}
 	},
 	"installsAfter": [

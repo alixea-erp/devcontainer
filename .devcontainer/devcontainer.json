@@ -12,18 +12,19 @@
       "configureZshAsDefaultShell": "true"
     },
     "ghcr.io/devcontainers/features/node:2": {
-      "version": "24"
+      "version": "26"
     },
     "./local-features/bun": {
-      "version": "1.4.2"
+      "version": "1.4.5"
     },
     "ghcr.io/va-h/devcontainers-features/uv:1": {
-      "version": "latest"
+      "version": "0.13.9"
     },
     "ghcr.io/devcontainers/features/git:1": {
       "version": "latest"
     },
     "ghcr.io/coder/devcontainer-features/code-server:1": {
+      "version": "4.146.0",
       "appName": "Diploi",
       "disableWorkspaceTrust": "true",
       "disableGettingStartedOverride": "true",

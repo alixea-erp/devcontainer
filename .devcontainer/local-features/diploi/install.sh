@@ -78,46 +78,20 @@ else
 fi
 EOT
 
-# Setup PNPM (pinned to v11)
+# Setup pnpm, the version the components' base image has (alixea-erp/component-bases). Node.js stopped shipping
+# corepack in version 25. The settings are ENV in the Dockerfile
 mkdir -p /home/$_CONTAINER_USER/.pnpm-store
 chown $_CONTAINER_USER:$_CONTAINER_USER /home/$_CONTAINER_USER/.pnpm-store
-sudo -u $_CONTAINER_USER -H zsh -lc "export PNPM_HOME=/home/$_CONTAINER_USER/.local/share/pnpm && export PATH=\"\$PNPM_HOME/bin:\$PNPM_HOME:\$PATH\" && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 . /usr/local/share/nvm/nvm.sh && corepack enable pnpm && corepack install -g pnpm@11 && SHELL=/usr/bin/zsh pnpm setup && pnpm config set store-dir /home/$_CONTAINER_USER/.pnpm-store --global"
-
-# Persist pnpm config env vars (removed from global config in newer pnpm versions)
-cat <<'EOF' >> /home/$_CONTAINER_USER/.zshrc
-export PNPM_CONFIG_NODE_LINKER=hoisted
-export PNPM_CONFIG_MINIMUM_RELEASE_AGE=0
-export PNPM_CONFIG_STRICT_DEP_BUILDS=false
-
-# Fix missing global config for supportedArchitectures with PNPM v11
-pnpm() {
-  case "${1:-}" in install|i|add|update|up|remove|rm)
-    local root="$PWD"
-    while [[ "$root" != "/" && ! -f "$root/pnpm-workspace.yaml" ]]; do
-      root="${root:h}"
-    done
-    if [[ ! -f "$root/pnpm-workspace.yaml" ]]; then
-      root="$PWD"
-      while [[ "$root" != "/" && ! -f "$root/package.json" ]]; do
-        root="${root:h}"
-      done
-    fi
-    if [[ -f "$root/pnpm-workspace.yaml" ]] || [[ -f "$root/package.json" ]]; then
-      grep -qs "^supportedArchitectures:" "$root/pnpm-workspace.yaml" 2>/dev/null || \
-        printf '\nsupportedArchitectures:\n  libc:\n    - glibc\n    - musl\n' >> "$root/pnpm-workspace.yaml"
-    fi
-  esac
-  command pnpm "$@"
-}
-EOF
+bash -c '. /usr/local/share/nvm/nvm.sh && npm install -g corepack@0.36.0'
+sudo -u $_CONTAINER_USER -H zsh -lc "export PNPM_HOME=/home/$_CONTAINER_USER/.local/share/pnpm && export PATH=\"\$PNPM_HOME/bin:\$PNPM_HOME:\$PATH\" && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 . /usr/local/share/nvm/nvm.sh && corepack enable pnpm && corepack install -g pnpm@12.21.0 && SHELL=/usr/bin/zsh pnpm setup && pnpm config set store-dir /home/$_CONTAINER_USER/.pnpm-store --global"
 
 # Install opencode globally and symlink it to a stable path for supervisord and non-login shells
-bash -c '. /usr/local/share/nvm/nvm.sh && npm install -g opencode-ai@~1.18.35'
+bash -c '. /usr/local/share/nvm/nvm.sh && npm install -g opencode-ai@~1.19.6'
 ln -sf "$(bash -c '. /usr/local/share/nvm/nvm.sh && command -v opencode')" /usr/local/bin/opencode
 
 # Playwright with a headless Chromium, so AI agents can check pages without installing browsers into the project.
 # Only the CLI wrapper and the shim use /opt/ms-playwright; a project's own Playwright keeps using ~/.cache/ms-playwright.
-bash -c '. /usr/local/share/nvm/nvm.sh && npm install --prefix /opt/playwright playwright@1.63.0'
+bash -c '. /usr/local/share/nvm/nvm.sh && npm install --prefix /opt/playwright playwright@1.65.1'
 PLAYWRIGHT_BROWSERS_PATH=/opt/ms-playwright /opt/playwright/node_modules/.bin/playwright install --with-deps --only-shell chromium
 chown -R $_CONTAINER_USER:$_CONTAINER_USER /opt/ms-playwright
 rm -rf /var/lib/apt/lists/*
