@@ -1,0 +1,56 @@
+FROM ubuntu:noble
+
+RUN if id "ubuntu" &>/dev/null; then \
+        echo "Deleting user 'ubuntu'" && userdel -f -r ubuntu || echo "Failed to delete ubuntu user"; \  
+    else \
+        echo "User 'ubuntu' does not exist"; \ 
+    fi
+
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    # Restore man command
+    && yes | unminimize 2>&1 
+
+ENV LANG="C.UTF-8"
+
+# Install basic build tools
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        make \
+        unzip \
+        # The tools in this package are used when installing packages for Python
+        build-essential \
+        # Required for PostgreSQL
+        libpq-dev \
+        # Required for ts
+        moreutils \
+        rsync \
+        zip \
+        jq \
+        curl \
+        # Required for VS Code SSH remote
+        netcat-openbsd \
+        # Required for scp support
+        openssh-server
+
+# Build tools for native packages, and tools and shells not in the common script
+RUN apt-get -y install cmake python3-dev \
+    && apt-get install -yq vim vim-doc xtail software-properties-common libsecret-1-dev
+
+# Install and configure supervisord
+RUN apt-get install -y supervisor
+COPY supervisord.conf /etc/supervisord.conf
+
+# Create diploi and dip scripts for running devpod-cli (javascript is mounted at runtime into the container)
+RUN echo '#!/bin/bash' > /usr/local/bin/diploi \
+    && echo 'bun /usr/local/lib/diploi-cli/diploi.js "$@"' >> /usr/local/bin/diploi \
+    && chmod +x /usr/local/bin/diploi \
+    && cp /usr/local/bin/diploi /usr/local/bin/dip
+
+
+# Clean up
+RUN apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+
+CMD [ "supervisord", "-c", "/etc/supervisord.conf" ]
