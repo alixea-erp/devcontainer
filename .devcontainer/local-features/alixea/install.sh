@@ -9,14 +9,14 @@ chown -R $_CONTAINER_USER:$_CONTAINER_USER /home/$_CONTAINER_USER/.local
 # Make /tmp world-writable (with sticky bit) so non-root users and agents can use it
 chmod 1777 /tmp
 
-# Symlink the Diploi provided gitconfig to be used by the user
-ln -s /etc/diploi-git/gitconfig /etc/gitconfig
+# Symlink the Alixea provided gitconfig to be used by the user
+ln -s /etc/alixea-git/gitconfig /etc/gitconfig
 
 # Configure VS Code
 mkdir -p /home/$_CONTAINER_USER/.local/share/code-server/User
 cat > /home/$_CONTAINER_USER/.local/share/code-server/User/settings.json <<EOT
 {
-  "workbench.colorTheme": "Default Dark Modern",
+  "workbench.colorTheme": "Dark Modern",
   "workbench.startupEditor": "none",
   "chat.agentsControl.enabled": false,
   "keyboard.dispatch": "keyCode"
@@ -25,20 +25,19 @@ EOT
 chown -R $_CONTAINER_USER:$_CONTAINER_USER /home/$_CONTAINER_USER/.local/share/code-server
 
 # Create a nice welcome message
-# Logo generated with "figlet -f small Diploi | /usr/games/lolcat -p 1.9 -S 20 --force > motd.txt"
+# The logo is figlet's small font in Alixea's greens, #319a6e to #c8f7df as the nearest 256-colour codes
 cat > /etc/motd <<'EOT'
- [38;5;199m [39m[38;5;199m_[39m[38;5;199m_[39m[38;5;199m_[39m[38;5;199m [39m[38;5;199m [39m[38;5;163m_[39m[38;5;164m [39m[38;5;164m [39m[38;5;164m [39m[38;5;164m [39m[38;5;164m [39m[38;5;164m [39m[38;5;164m_[39m[38;5;128m [39m[38;5;129m [39m[38;5;129m [39m[38;5;129m [39m[38;5;129m [39m[38;5;129m_[39m[38;5;93m [39m[38;5;93m[39m
- [38;5;199m|[39m[38;5;199m [39m[38;5;199m [39m[38;5;199m [39m[38;5;163m\[39m[38;5;164m([39m[38;5;164m_[39m[38;5;164m)[39m[38;5;164m_[39m[38;5;164m [39m[38;5;164m_[39m[38;5;164m_[39m[38;5;128m|[39m[38;5;129m [39m[38;5;129m|[39m[38;5;129m_[39m[38;5;129m_[39m[38;5;129m_[39m[38;5;93m([39m[38;5;93m_[39m[38;5;93m)[39m[38;5;93m[39m
- [38;5;199m|[39m[38;5;199m [39m[38;5;163m|[39m[38;5;164m)[39m[38;5;164m [39m[38;5;164m|[39m[38;5;164m [39m[38;5;164m|[39m[38;5;164m [39m[38;5;164m'[39m[38;5;128m_[39m[38;5;129m [39m[38;5;129m\[39m[38;5;129m [39m[38;5;129m/[39m[38;5;129m [39m[38;5;93m_[39m[38;5;93m [39m[38;5;93m\[39m[38;5;93m [39m[38;5;93m|[39m[38;5;93m[39m
- [38;5;163m|[39m[38;5;164m_[39m[38;5;164m_[39m[38;5;164m_[39m[38;5;164m/[39m[38;5;164m|[39m[38;5;164m_[39m[38;5;164m|[39m[38;5;128m [39m[38;5;129m.[39m[38;5;129m_[39m[38;5;129m_[39m[38;5;129m/[39m[38;5;129m_[39m[38;5;129m\[39m[38;5;93m_[39m[38;5;93m_[39m[38;5;93m_[39m[38;5;93m/[39m[38;5;93m_[39m[38;5;93m|[39m[38;5;63m[39m
- [38;5;164m [39m[38;5;164m [39m[38;5;164m [39m[38;5;164m [39m[38;5;164m [39m[38;5;164m [39m[38;5;128m [39m[38;5;129m|[39m[38;5;129m_[39m[38;5;129m|[39m[38;5;129m [39m[38;5;129m [39m[38;5;129m [39m[38;5;93m [39m[38;5;93m [39m[38;5;93m [39m[38;5;93m [39m[38;5;93m [39m[38;5;93m [39m[38;5;63m [39m[38;5;63m [39m[38;5;63m[39m
+ [38;5;29m [39m[38;5;29m [39m[38;5;29m [39m[38;5;29m_[39m[38;5;29m [39m[38;5;35m [39m[38;5;35m [39m[38;5;35m [39m[38;5;35m_[39m[38;5;35m [39m[38;5;72m [39m[38;5;72m_[39m[38;5;72m [39m[38;5;72m [39m[38;5;72m [39m[38;5;78m [39m[38;5;78m [39m[38;5;78m [39m[38;5;78m [39m[38;5;115m [39m[38;5;115m [39m[38;5;115m [39m[38;5;115m [39m[38;5;115m [39m[38;5;158m [39m[38;5;158m [39m[38;5;158m [39m[38;5;158m [39m[38;5;158m [39m
+ [38;5;29m [39m[38;5;29m [39m[38;5;29m/[39m[38;5;29m_[39m[38;5;35m\[39m[38;5;35m [39m[38;5;35m [39m[38;5;35m|[39m[38;5;35m [39m[38;5;72m|[39m[38;5;72m([39m[38;5;72m_[39m[38;5;72m)[39m[38;5;72m_[39m[38;5;78m_[39m[38;5;78m [39m[38;5;78m_[39m[38;5;78m_[39m[38;5;115m [39m[38;5;115m_[39m[38;5;115m_[39m[38;5;115m_[39m[38;5;115m [39m[38;5;158m [39m[38;5;158m_[39m[38;5;158m_[39m[38;5;158m [39m[38;5;158m_[39m[38;5;194m [39m
+ [38;5;29m [39m[38;5;29m/[39m[38;5;29m [39m[38;5;35m_[39m[38;5;35m [39m[38;5;35m\[39m[38;5;35m [39m[38;5;35m|[39m[38;5;72m [39m[38;5;72m|[39m[38;5;72m|[39m[38;5;72m [39m[38;5;72m|[39m[38;5;78m\[39m[38;5;78m [39m[38;5;78m\[39m[38;5;78m [39m[38;5;115m/[39m[38;5;115m/[39m[38;5;115m [39m[38;5;115m-[39m[38;5;115m_[39m[38;5;158m)[39m[38;5;158m/[39m[38;5;158m [39m[38;5;158m_[39m[38;5;158m`[39m[38;5;194m [39m[38;5;194m|[39m
+ [38;5;29m/[39m[38;5;29m_[39m[38;5;35m/[39m[38;5;35m [39m[38;5;35m\[39m[38;5;35m_[39m[38;5;35m\[39m[38;5;72m|[39m[38;5;72m_[39m[38;5;72m|[39m[38;5;72m|[39m[38;5;72m_[39m[38;5;78m|[39m[38;5;78m/[39m[38;5;78m_[39m[38;5;78m\[39m[38;5;115m_[39m[38;5;115m\[39m[38;5;115m\[39m[38;5;115m_[39m[38;5;115m_[39m[38;5;158m_[39m[38;5;158m|[39m[38;5;158m\[39m[38;5;158m_[39m[38;5;158m_[39m[38;5;194m,[39m[38;5;194m_[39m[38;5;194m|[39m
 
- [0;37m👋 Welcome to your Diploi development environment!
+ [0;37m👋 Welcome to your Alixea development environment!
     - Your application processes are [1;37mnot[0;37m running in this shell (for example, Node.js or Bun).
     - You can run commands here, for example "npm install".
     - You can edit your code here. Changes are instantly reflected across all components.
     - AI coding assistance is available in the terminal by typing "opencode".
-    - Check the Diploi CLI for more info. Type "diploi" to see all available commands.[0m
+    - Check the Alixea CLI for more info. Type "alixea" to see all available commands.[0m
 
 EOT
 
@@ -61,17 +60,17 @@ cd /app
 EOF
 
 # Create the runonce.sh script
-cat > /usr/local/bin/diploi-runonce.sh <<EOT
+cat > /usr/local/bin/alixea-runonce.sh <<EOT
 #!/bin/sh
 
 #
 # Script to initialize a new development environment
 #
 
-if [ -d "/home/diploi-tmp" ] && [ -z "\$( ls -A '/home/diploi-tmp' )" ]; then
+if [ -d "/home/alixea-tmp" ] && [ -z "\$( ls -A '/home/alixea-tmp' )" ]; then
   # Copy home directory files from the Docker build if the actual home folder is empty
   echo "First boot detected. Will copy the home folder contents."
-  mv -n /home/$_CONTAINER_USER/.[!.]* /home/diploi-tmp/
+  mv -n /home/$_CONTAINER_USER/.[!.]* /home/alixea-tmp/
 
 else
   echo "Not the first boot. Skipping home folder init."
@@ -108,28 +107,28 @@ exec /opt/playwright/node_modules/.bin/playwright "$@"
 EOT
 chmod +x /usr/local/bin/playwright
 
-chmod +x /usr/local/bin/diploi-runonce.sh
+chmod +x /usr/local/bin/alixea-runonce.sh
 
 # Create supervisord entry for user specified init scripts
 cat <<EOT >> /etc/supervisord.conf
-; Added by diploi feature
-[program:diploi-fix-permissions]
+; Added by alixea feature
+[program:alixea-fix-permissions]
 command=/bin/bash -c 'chmod 1777 /tmp; mkdir -p /home/$_CONTAINER_USER/.local && chown -R $_CONTAINER_USER:$_CONTAINER_USER /home/$_CONTAINER_USER/.local'
 autostart=true
 autorestart=false
 startsecs=0
 priority=2
-stdout_logfile=/var/log/supervisor/diploi-fix-permissions.log
-stderr_logfile=/var/log/supervisor/diploi-fix-permissions.err.log
+stdout_logfile=/var/log/supervisor/alixea-fix-permissions.log
+stderr_logfile=/var/log/supervisor/alixea-fix-permissions.err.log
 
-[program:diploi-init]
-command=/bin/bash -c 'if [ -f /etc/diploi/init.sh ]; then bash -e /etc/diploi/init.sh; fi'
+[program:alixea-init]
+command=/bin/bash -c 'if [ -f /etc/alixea/init.sh ]; then bash -e /etc/alixea/init.sh; fi'
 autostart=true
 autorestart=false
 startsecs=0
 priority=5
-stdout_logfile=/var/log/supervisor/diploi-init.log
-stderr_logfile=/var/log/supervisor/diploi-init.err.log
+stdout_logfile=/var/log/supervisor/alixea-init.log
+stderr_logfile=/var/log/supervisor/alixea-init.err.log
 
 [program:opencode]
 directory=/app
@@ -141,8 +140,8 @@ autorestart=true
 stopasgroup=true
 killasgroup=true
 priority=30
-stdout_logfile=/var/log/supervisor/diploi-opencode.log
-stderr_logfile=/var/log/supervisor/diploi-opencode.err.log
+stdout_logfile=/var/log/supervisor/alixea-opencode.log
+stderr_logfile=/var/log/supervisor/alixea-opencode.err.log
 
 EOT
 

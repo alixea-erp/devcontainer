@@ -1,0 +1,7 @@
+{
+  "id": "alixea",
+  "name": "Alixea",
+  "description": "Configures Alixea specific features.",
+  "version": "1.0.0",
+  "installsAfter": ["ghcr.io/devcontainers/features/git"]
+}

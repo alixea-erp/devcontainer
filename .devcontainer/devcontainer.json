@@ -13,7 +13,7 @@
     },
     "ghcr.io/devcontainers/features/node:2": {
       "version": "26",
-      // pnpm comes from corepack, in local-features/diploi
+      // pnpm comes from corepack, in local-features/alixea
       "pnpmVersion": "none"
     },
     "./local-features/bun": {
@@ -27,7 +27,7 @@
     },
     "ghcr.io/coder/devcontainer-features/code-server:1": {
       "version": "4.146.0",
-      "appName": "Diploi",
+      "appName": "Alixea",
       "disableWorkspaceTrust": "true",
       "disableGettingStartedOverride": "true",
       "disableUpdateCheck": "true",
@@ -40,7 +40,7 @@
     "./local-features/code-server-service": "latest",
     "./local-features/direnv": "latest",
     "./local-features/postgres-client": "latest",
-    "./local-features/diploi": "latest"
+    "./local-features/alixea": "latest"
   },
   "overrideFeatureInstallOrder": [
     "ghcr.io/devcontainers/features/common-utils",
@@ -52,7 +52,7 @@
     "./local-features/code-server-service",
     "./local-features/direnv",
     "./local-features/postgres-client",
-    "./local-features/diploi"
+    "./local-features/alixea"
   ],
   "remoteUser": "codespace",
   "containerUser": "codespace",

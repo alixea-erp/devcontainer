@@ -52,11 +52,10 @@ RUN apt-get -y install cmake python3-dev \
 RUN apt-get install -y supervisor
 COPY supervisord.conf /etc/supervisord.conf
 
-# Create diploi and dip scripts for running devpod-cli (javascript is mounted at runtime into the container)
-RUN echo '#!/bin/bash' > /usr/local/bin/diploi \
-    && echo 'bun /usr/local/lib/diploi-cli/diploi.js "$@"' >> /usr/local/bin/diploi \
-    && chmod +x /usr/local/bin/diploi \
-    && cp /usr/local/bin/diploi /usr/local/bin/dip
+# The alixea command runs devpod-cli, whose javascript core mounts into the container at runtime
+RUN echo '#!/bin/bash' > /usr/local/bin/alixea \
+    && echo 'bun /usr/local/lib/alixea-cli/alixea.js "$@"' >> /usr/local/bin/alixea \
+    && chmod +x /usr/local/bin/alixea
 
 
 # Clean up
